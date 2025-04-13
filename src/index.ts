@@ -1,3 +1,3 @@
-export default function sum(a: number, b: number) {
-  return a + b;
-}
+import Glass from "./class/Glass";
+
+export default Glass;
