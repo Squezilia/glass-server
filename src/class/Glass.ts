@@ -1,23 +1,21 @@
 import {
   App,
   AppOptions,
-  TemplatedApp,
   us_listen_socket,
   us_listen_socket_close,
 } from "uWebSockets.js";
+import Router from "./Router";
 
-export default class Glass {
-  uws: TemplatedApp;
+export default class Glass extends Router {
   options: AppOptions = {};
   host: string = "0.0.0.0";
-  port?: number;
-  socket?: us_listen_socket;
+  protected port?: number;
+  protected socket?: us_listen_socket;
 
   constructor(options?: AppOptions) {
     const app = App(options || {});
-    this.uws = app;
 
-    this.initiateServer();
+    super(app);
   }
 
   protected initiateServer() {
@@ -34,6 +32,8 @@ export default class Glass {
       this.host = host || this.host;
       this.uws.listen(this.host, this.port, (socket) => {
         this.socket = socket;
+        this.initiateServer();
+        this.initiateRouter();
         resolve(this.socket);
       });
     });
